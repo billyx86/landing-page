@@ -83,7 +83,7 @@ a {
   }
 
 /* Information */
-.information {
+.info-section {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -123,3 +123,77 @@ a {
     font-size: 18px;
 }
 
+/* quote section */
+
+.quote-section {
+    background-color: #E5E7EB;
+    width: 100%;
+    height: 100%;
+}
+
+.inner-quote-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 92px;
+    margin-bottom: 92px;
+}
+
+.quote-text {
+    font-weight: 300;
+    font-style: italic;
+    font-size: 1.75rem;
+    padding: 0 1rem;
+    margin: 0;
+    margin-top: 0.5rem;
+ }
+
+.quote-author {
+    display: block;
+    text-align: right;
+    font-style: normal;
+    font-weight: bold;
+    padding: 0.5rem 1.25rem;
+}
+
+/* cta */
+
+.cta {
+    width: 100%;
+    height: 100%;
+}
+
+.inner-cta {
+    display: flex;
+    justify-content: space-between;
+    background-color: #3882F6;
+    padding: 35px 150px;
+    margin: 92px 180px;
+    border-radius: 15px;
+}
+
+.cta-title {
+    color: #f9faf8;
+    font-size: 24px;
+    margin-bottom: 0;
+}
+
+.cta-subtext {
+    margin-top: 0;
+    color: #E5E7EB;
+    font-size: 18px;
+}
+
+.inner-cta button {
+    background-color: #3882F6;
+    border-style: solid;
+    border-color: white;
+    color: white;
+    font-weight: bold;
+    padding: 0 35px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    border-radius: 12px;
+}
