@@ -71,7 +71,7 @@ a {
 .hero-text button {
     background-color: #3882F6;
     border: none;
-    color: white;
+    color: #f9faf8;
     font-weight: bold;
     padding: 10px 35px;
     text-align: center;
@@ -187,8 +187,8 @@ a {
 .inner-cta button {
     background-color: #3882F6;
     border-style: solid;
-    border-color: white;
-    color: white;
+    border-color: #f9faf8;
+    color: #f9faf8;
     font-weight: bold;
     padding: 0 35px;
     text-align: center;
@@ -196,4 +196,15 @@ a {
     display: inline-block;
     font-size: 18px;
     border-radius: 12px;
+}
+
+/* footer */
+
+footer {
+    background-color: #1F2937;
+    width: 100%;
+    height: 100%;
+    color: #f9faf8;
+    text-align: center;
+    padding: 50px;
 }
