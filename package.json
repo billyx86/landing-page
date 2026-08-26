@@ -1,0 +1,10 @@
+{
+  "name": "landing-page",
+  "version": "1.0.0",
+  "description": "A cat-themed landing page project (freeCodeCamp).",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
