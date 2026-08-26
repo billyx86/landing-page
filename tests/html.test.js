@@ -15,6 +15,11 @@ test("has a responsive viewport meta tag", () => {
   assert.match(m[0], /width=device-width/i, "viewport is not width=device-width");
 });
 
+test("exactly one <h1> on the page (heading order stays sane for screen readers)", () => {
+  const h1s = html.match(/<h1\b/gi) ?? [];
+  assert.equal(h1s.length, 1, `expected exactly one <h1>, found ${h1s.length} — everything after the hero is a sub-section and should be <h2>`);
+});
+
 test("every <img> has a non-empty alt attribute", () => {
   const imgs = [...html.matchAll(/<img\b[^>]*>/gi)].map((m) => m[0]);
   assert.ok(imgs.length > 0, "expected the page to contain images");
