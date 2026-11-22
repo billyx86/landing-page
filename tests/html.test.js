@@ -49,6 +49,28 @@ test("every local image referenced in the HTML exists in the repo", () => {
   }
 });
 
+test("the two Sign up controls are real links with real destinations (no dead buttons)", () => {
+  const deadButtons = [...html.matchAll(/<button\b[^>]*>\s*Sign up\s*<\/button>/gi)].length;
+  assert.equal(deadButtons, 0, `expected no dead <button>Sign up</button> elements, found ${deadButtons}`);
+
+  const signupAnchors = [...html.matchAll(/<a\b[^>]*>\s*Sign up\s*<\/a>/gi)].map((m) => m[0]);
+  assert.equal(signupAnchors.length, 2, `expected exactly two Sign up anchors, found ${signupAnchors.length}`);
+
+  for (const [i, tag] of signupAnchors.entries()) {
+    const href = tag.match(/\bhref=["']([^"']+)["']/i);
+    assert.ok(href, `sign-up anchor #${i + 1} has no href: ${tag.slice(0, 60)}...`);
+    assert.notEqual(href[1], "#", `sign-up anchor #${i + 1} is still a placeholder href="#"`);
+    // In-page anchors must point at a real id; external links must be safe.
+    if (href[1].startsWith("#")) {
+      const id = href[1].slice(1);
+      assert.ok(new RegExp(`\\bid=["']${id}["']`).test(html), `sign-up anchor #${i + 1} points at missing id "${id}"`);
+    } else if (href[1].startsWith("http")) {
+      assert.match(tag, /\btarget=["']_blank["']/i, `external sign-up anchor #${i + 1} lacks target="_blank"`);
+      assert.match(tag, /\brel=["'][^"']*\bnoopener\b[^"']*["']/i, `external sign-up anchor #${i + 1} lacks rel="noopener"`);
+    }
+  }
+});
+
 test("exactly one <h1> on the page (heading order stays sane for screen readers)", () => {
   const h1s = html.match(/<h1\b/gi) ?? [];
   assert.equal(h1s.length, 1, `expected exactly one <h1>, found ${h1s.length} — everything after the hero is a sub-section and should be <h2>`);
