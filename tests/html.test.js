@@ -53,8 +53,15 @@ test("the two Sign up controls are real links with real destinations (no dead bu
   const deadButtons = [...html.matchAll(/<button\b[^>]*>\s*Sign up\s*<\/button>/gi)].length;
   assert.equal(deadButtons, 0, `expected no dead <button>Sign up</button> elements, found ${deadButtons}`);
 
-  const signupAnchors = [...html.matchAll(/<a\b[^>]*>\s*Sign up\s*<\/a>/gi)].map((m) => m[0]);
-  assert.equal(signupAnchors.length, 2, `expected exactly two Sign up anchors, found ${signupAnchors.length}`);
+  // Scope to the hero and CTA sections — the two places that used to
+  // contain the dead <button>Sign up</button> elements. (The header nav
+  // may legitimately carry its own Sign up link; the nav test covers it.)
+  const hero = html.match(/<main\b[^>]*>[\s\S]*?<\/main>/i)?.[0] ?? "";
+  const cta = html.match(/<div class="cta"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/i)?.[0] ?? html.match(/id="cta"[\s\S]*?Sign up[\s\S]*?<\/a>/i)?.[0] ?? "";
+  const signupAnchors = [...hero.matchAll(/<a\b[^>]*>\s*Sign up\s*<\/a>/gi)]
+    .concat([...cta.matchAll(/<a\b[^>]*>\s*Sign up\s*<\/a>/gi)])
+    .map((m) => m[0]);
+  assert.equal(signupAnchors.length, 2, `expected exactly two Sign up anchors in the hero and CTA, found ${signupAnchors.length}`);
 
   for (const [i, tag] of signupAnchors.entries()) {
     const href = tag.match(/\bhref=["']([^"']+)["']/i);
@@ -67,6 +74,35 @@ test("the two Sign up controls are real links with real destinations (no dead bu
     } else if (href[1].startsWith("http")) {
       assert.match(tag, /\btarget=["']_blank["']/i, `external sign-up anchor #${i + 1} lacks target="_blank"`);
       assert.match(tag, /\brel=["'][^"']*\bnoopener\b[^"']*["']/i, `external sign-up anchor #${i + 1} lacks rel="noopener"`);
+    }
+  }
+});
+
+test("header nav links are not placeholders and resolve to real destinations", () => {
+  const header = html.match(/<header\b[^>]*>[\s\S]*?<\/header>/i);
+  assert.ok(header, "no <header> element found");
+  const links = [...header[0].matchAll(/<a\b[^>]*>[^<]*<\/a>/gi)].map((m) => m[0]);
+  assert.ok(links.length > 0, "expected nav links inside <header>");
+  for (const [i, tag] of links.entries()) {
+    const text = tag.replace(/<[^>]+>/g, "").trim();
+    assert.ok(
+      !/^header link/i.test(text),
+      `nav link #${i + 1} still has placeholder text: "${text}"`
+    );
+    const href = tag.match(/\bhref=["']([^"']+)["']/i);
+    assert.ok(href, `nav link #${i + 1} has no href: ${tag.slice(0, 60)}...`);
+    if (href[1] === "#" || href[1] === "") {
+      assert.fail(`nav link #${i + 1} ("${text}") is still a placeholder href="#"`);
+    }
+    if (href[1].startsWith("#")) {
+      const id = href[1].slice(1);
+      assert.ok(
+        new RegExp(`\\bid=["']${id}["']`).test(html),
+        `nav link #${i + 1} ("${text}") points at missing id "${id}"`
+      );
+    } else if (href[1].startsWith("http")) {
+      assert.match(tag, /\btarget=["']_blank["']/i, `external nav link #${i + 1} lacks target="_blank"`);
+      assert.match(tag, /\brel=["'][^"']*\bnoopener\b[^"']*["']/i, `external nav link #${i + 1} lacks rel="noopener"`);
     }
   }
 });
