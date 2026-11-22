@@ -33,11 +33,9 @@ header h2 {
     font-size: 24px;
 }
 
-ul {
-    list-style-type: none;
+.nav {
     display: flex;
     margin: 16px;
-    padding: 0;
     gap: 16px;
 }
   
@@ -68,7 +66,7 @@ a {
     color: #E5E7EB
 }
 
-.hero-text button {
+.hero-text .signup {
     background-color: #3882F6;
     border: none;
     color: #f9faf8;
@@ -184,7 +182,7 @@ a {
     font-size: 18px;
 }
 
-.inner-cta button {
+.inner-cta .signup {
     background-color: #3882F6;
     border-style: solid;
     border-color: #f9faf8;
